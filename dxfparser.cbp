@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="dxfparser" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="C:/dxfparser/dxfparser" prefix_auto="1" extension_auto="1" />
+				<Option object_output="C:/temp" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-DBUILD_DLL" />
+					<Add directory="C:/dxfparser/" />
+				</Compiler>
+				<Linker>
+					<Add library="user32" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="c:/dxfparser/dxfparser" prefix_auto="1" extension_auto="1" />
+				<Option object_output="c:/dxfparser/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-DBUILD_DLL" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="user32" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="DXFEXTNT.H" />
+		<Unit filename="DXFIDENT.H" />
+		<Unit filename="DXFLIST.CPP" />
+		<Unit filename="DXFLIST.H" />
+		<Unit filename="DXFSTRCT.H" />
+		<Unit filename="DXFXTNT2.cpp" />
+		<Unit filename="Dxfiden1.cpp" />
+		<Unit filename="Dxfio.h" />
+		<Unit filename="IMGSCALE.H" />
+		<Unit filename="IMGXLATE.H" />
+		<Unit filename="Imgscale.cpp" />
+		<Unit filename="Imgxlate.cpp" />
+		<Unit filename="dxfio.cpp" />
+		<Unit filename="fileio.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="main.h" />
+		<Extensions>
+			<code_completion>
+				<search_path add="I:\dxfparser\" />
+			</code_completion>
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
