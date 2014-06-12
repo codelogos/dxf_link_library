@@ -109,7 +109,7 @@ BSTR DLLEXPORT returnEntity()
         fio.fileWrite(Circle->xcenter*scale+dx+deltax,0);
         fio.fileWrite(bottom - Circle->ycenter*scale+dy+deltay,0);
         fio.fileWrite(Circle->radius*scale,0);*/
-        sprintf(entityBuffer,"C,%f,%f,%f",Circle->xcenter,Circle->ycenter,Circle->radius);
+        sprintf(entityBuffer,"Circle,%f,%f,%f",Circle->xcenter,Circle->ycenter,Circle->radius);
     }
 
     if (tmplink->entityType == LINE)
@@ -123,7 +123,7 @@ BSTR DLLEXPORT returnEntity()
 
         //line(Line->startx*scale+dx+deltax,bottom - (Line->starty*scale+dy+deltay),Line->endx*scale+dx+deltax,bottom-(Line->endy*scale+dy+deltay));
         //gP->drawSegment(line->startx*scale+dx+deltax,line->starty*scale+dy+deltay,line->endx*scale+dx+deltax,line->endy*scale+dy+deltay);
-        sprintf(entityBuffer,"L,%f,%f,%f,%f",Line->startx,Line->starty,Line->endx,Line->endy);
+        sprintf(entityBuffer,"Line,%f,%f,%f,%f",Line->startx,Line->starty,Line->endx,Line->endy);
     }
     if (tmplink->entityType == ARC)
     {
@@ -137,7 +137,7 @@ BSTR DLLEXPORT returnEntity()
          fio.fileWrite(Arc->radius);
         */
 
-        sprintf(entityBuffer,"A,%f,%f,%f,%f,%f",Arc->startangle,Arc->endangle,Arc->radius,Arc->xcenter,Arc->ycenter);
+        sprintf(entityBuffer,"Arc,%f,%f,%f,%f,%f",Arc->startangle,Arc->endangle,Arc->radius,Arc->xcenter,Arc->ycenter);
 
         /*if (abs((int)Arc->startangle - (int)Arc->endangle) < 5)
         {
