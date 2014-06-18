@@ -111,35 +111,18 @@ int DXFLinkList::isVertexJoined(DXFLinkList *dll)
 }
 void DXFLinkList::addnode(type t, char* ctemp)
 {
-    static int blop;
     char* p,* tptr = NULL;
     double dtemp;
     static double totalPolyLength;
-    static int joinVertex;
-//	char temp2[256];
     char temp2[40];
     temp = new DXFLinkList();
 
-//	fileIO fio("f:\\bc45\\bin\\death.txt",O_APPEND);
-//	fio.fileWrite(&fio,ctemp,0);
-    /*	if (t == vertex)
-       	{
-       	joinVertex = 1;
-       	}
-       if (joinVertex == 1)
-       		temp->joinVertex = 1;
-     */
     if (dllHead == NULL)
     {
         dllHead = temp;
-
-        //cout<<"got to line 64"<<endl;
         dllHead->next = NULL;
         dllHead->prev = NULL;
         dllTail = dllHead;
-        //printf("previous node:%p\n",temp->next);
-        //printf("current node:%p\n",temp);
-        //printf("%p\n",head);
         dllTemp = dllHead;
         dllTemp->current = dllHead;
     }
@@ -190,7 +173,7 @@ void DXFLinkList::addnode(type t, char* ctemp)
                 dllTemp->plCurrent->prev = dllTemp->plTemp;
                 dllTemp->plTemp = dllTemp->plCurrent;
             }
-            char *_temp, *endptr;
+            char *_temp;
 
             for (int i = 0; i<2; i++)
             {
@@ -259,15 +242,7 @@ void DXFLinkList::addnode(type t, char* ctemp)
 
     if (t == arc)
     {
-        //printf("doin the arc\n");
         char enttemp[5][5] = {{" 10 "},{" 20 "},{" 40 "},{" 50 "},{" 51 "}};
-
-        //fio.fileWrite(&fio,p,1);
-
-        //sprintf(temp2,"%s",p);
-
-        //fio.fileWrite(&fio,temp2,1);
-
         for (int i = 0; i<5; i++)
         {
 
@@ -337,7 +312,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
 
     if (t == line)
     {
-        //printf("doin the line\n");
         for (int i = 0; i<4; i++)
         {
             char enttemp[4][5] = {{" 10 "},{" 20 "},{" 11 "},{" 21 "}};
@@ -346,7 +320,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
             if (p == 0)
             {
                 dtemp = 0;
-                //logerr
             }
             else
             {
@@ -388,7 +361,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
 
     if (t == circle)
     {
-        //	printf("doin the circle\n");
         for (int i = 0; i<3; i++)
         {
             char enttemp[3][5] = {{" 10 "},{" 20 "},{" 40 "}};
@@ -404,11 +376,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
                 dtemp = atof(p+4);
                 *(p+4) = ' ';
             }
-
-            char temp[256];
-            //strncpy(temp,p+2,10);
-//                        sprintf(temp,"%d",i);//enttemp[i]);//*p);//enttemp[i][0]);//(char *)p);//(char *)dcircle->ParseValue[i+1]);//,current->dcircle->xcenter);
-//			MessageBox(NULL,temp,"",MB_OK);
 
 
             switch (i)

@@ -25,7 +25,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #ifndef DXFLIST_H
 #define DXFLIST_H
 extern double scaleValue;
- static int refcount;
+static int refcount;
 class DXFLinkList
 	{
 	char* block;
@@ -35,9 +35,9 @@ class DXFLinkList
 	DXFcircle* dcircle;
 	DXFpl *plTemp,*plHead,*plTail,*plCurrent;
 	int joinVertex;
-
+    DXFLinkList* dllHead, * dllTail,* dllTemp;
 	public:
-    DXFLinkList* dllHead,* dllTail,* dllTemp;
+
 	double entityLength;
 	type entityType;
 
@@ -53,7 +53,6 @@ class DXFLinkList
 
 	type returnType() const
 					 {
-					 //printf(": %d\n",dll->current->entityType);
 					 return this->entityType;
 					 };
 	DXFarc* returnArc() const
@@ -95,22 +94,15 @@ DXFLinkList* decrementNode() const
 		{
 		return this->prev;
 		}
-	DXFLinkList* returnHead() const
+DXFLinkList* returnHead() const
 		{
-		//if (dllHead == NULL)
-            /*MessageBox(NULL,"error","",MB_OK);
-        if (dllHead->next == NULL)
-            MessageBox(NULL,"error2","",MB_OK);*/
-
-		return dllHead;
+		return this->dllHead;
 		}
 
-	//DXFLinkList* returnCurrentNode(DXFLinkList* dll){return dll->current;};
 	void addnode(type, char*);
 	void addnodepoly(char*);
 	void removenode(){};
 	};
-//double DXFLinkList::totalLength = 0;
 
 #endif
 

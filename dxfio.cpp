@@ -29,27 +29,19 @@ int DXFio::fileRead()
     char *tmpptr;
     static int section, entities, entityfound;
     static int flag;
-    //cout<<sizeof(ptr)<<" ptr size"<<endl;
+
     long int prevByteSize;
     char ch;
     char textline[256]={'\n'};
     char *temp;
     long int i = 0, n = 0, totalbytes=0;
-//	fileIO fio("f:\\bc45\\bin\\temp2.txt",O_APPEND);
-//flength = filelength(fio);
     if (ptr[0] == NULL)
     {
-
-        ptr[0] = new char[MAXBLOCKSIZE+1];//fileLength];
-        memset(ptr[0],'\0',MAXBLOCKSIZE+1);//sizeof ptr[0]);
+        ptr[0] = new char[MAXBLOCKSIZE+1];
+        memset(ptr[0],'\0',MAXBLOCKSIZE+1);
     }
     while (fin->get(ch))
     {
-     //   cout<<textline<<endl;
-
-//cout<<arrayIdx<<endl;
-        //cout<<arrayIdx<<" "<<textline<<endl;
-
         if (section == 0)
         {
             textline[i] = ch;
@@ -84,14 +76,6 @@ int DXFio::fileRead()
 
         else
         {
-            /*static long int j;
-            fileIO fio("c:\\test.txt",1);
-            char fw[10];
-            itoa(j,fw,10);
-            fio.fileWrite((char*)fw);
-            //fio.fileWrite(ptr[k]);
-            cout<<j<<endl;
-            j++;*/
             i = 0;
 
             if (strlen(textline) > 0)
@@ -104,21 +88,10 @@ int DXFio::fileRead()
                     break;
                 }
 
-                //cout<<arrayIdx<<"  "<<i<<endl;
                 prevByteSize = totalbytes;
                 totalbytes += strlen(temp);
 
                 if (fileLength < MAXBLOCKSIZE); //don't need to find entity boundaries in this case
-                /*else if (totalbytes > MAXBLOCKSIZE &&
-                        strstr(textline," 0 ")
-                        )
-                {
-                    strcat(ptr[arrayIdx],"~");
-                    arrayIdx++;
-                    ptr[arrayIdx] =	new char[MAXBLOCKSIZE+ 1];
-                    memset(ptr[arrayIdx],'\0',MAXBLOCKSIZE+ 1);
-                    totalbytes = 0;
-                }*/
                 else if (strstr(temp,"ARC")      ||  //do we have the beginning of an entity?
                          strstr(temp,"LINE")     ||
                          strstr(temp,"CIRCLE")   ||
@@ -221,7 +194,6 @@ int DXFio::fileRead()
 
                 strcat(ptr[arrayIdx],temp);
 
-                //cout<<arrayIdx<<endl;
                 memset(textline,'\0',strlen(textline));
             }
         }
@@ -242,23 +214,12 @@ int DXFio::fileRead()
     memset(resize,'\0',totalbytes);
     strcpy(resize,ptr[arrayIdx]);
 
-    /*delete[] ptr[arrayIdx];
-
-    if (fileLength < MAXBLOCKSIZE)
-        ptr[arrayIdx] = new char[fileLength + 4];
-    else
-        ptr[arrayIdx] = new char[totalbytes + 4];*/
-
     strncpy(ptr[arrayIdx],resize,strlen(resize));
     strcat(ptr[arrayIdx],"EOF");
     delete[] resize;
     flag = entities = section = entityfound = 0;
 
-//fio.fileWrite(&fio,ptr[k],1);
     return 1;
-
-//cout<<totalbytes<<endl;
-//cout<<fileLength<<endl;
 }
 
 

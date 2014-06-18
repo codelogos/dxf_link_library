@@ -36,14 +36,12 @@ void DXFImageExtents::computeExtents()
 		DXFpolyline* dxfpoly;
 		type t;
 		int quad1,quad2,quad,temp;
-		float temp1,initx,inity;
-		static int temp2 = 0;
-		double radius, a, b, tx,ty,start_angle,temp_angle,
+
+
+		double radius, a, b, tx,ty,start_angle,
 				 end_angle,rl,rr,ru,rd,cx,cy;
 		int cw = 0;
-		//static int lockout;
-  //	fileIO fio("c:\\bin\\extent.txt",1);
-	char text[256];
+
 	do
 		{
 		t = dll->returnType();
@@ -401,7 +399,7 @@ void DXFImageExtents::computeExtents()
 	else if((quad1>5 && quad2 > 5 && quad1 != quad2)&& t == arc)
 		{
 		D(cout<<"dxfxtnt 355"<<endl);
-		int test,a1=0,b1=0,c1=0,d1=0,a2 = 0,b2 = 0, c2 = 0, d2 = 0;
+		int a1=0,b1=0,c1=0,d1=0,a2 = 0,b2 = 0, c2 = 0, d2 = 0;
 
 			if (quad ==1|| quad == 3)
 
@@ -474,7 +472,7 @@ void DXFImageExtents::computeExtents()
 	else if (((quad1<5&&quad2>5)||(quad1>5&&quad2<5))&& t == arc)
 		{
 		D(cout<<"dxfxtnt 428"<<endl);
-		int a1 = 0, a2 = 0, a3 = 0, a4 = 0,b1 = 0, b2 = 0,b3 = 0,b4=0,temp1;
+		int a1 = 0, a2 = 0, a3 = 0, a4 = 0,b1 = 0, b2 = 0,b3 = 0,b4=0;
 
 		if (quad1<5 && quad2 > 5)
 			{
@@ -483,7 +481,6 @@ void DXFImageExtents::computeExtents()
 			quad1 = quad2;
 			quad2 = temp;
 			cw = !cw;
-			temp2 = 1;
 			}
 
 		if ((quad1 == 10&&quad2==1&&cw==0)||(quad1 == 10&&quad2==4&&cw==1))
@@ -626,7 +623,6 @@ void DXFImageExtents::computeExtents()
 		if (dxfline->startx == 0.0 && dxfline->starty == 0.0 && dxfline->endy == 0.0 && dxfline->endx == 0.0);
 		else
 			{
-//			if (dxfline->starty < 0)
 			assignment(dxfline->startx*scale, dxfline->startx*scale, dxfline->starty*scale, dxfline->starty*scale);
 			assignment(dxfline->endx*scale, dxfline->endx*scale, dxfline->endy*scale, dxfline->endy*scale);
 			}
@@ -636,7 +632,6 @@ void DXFImageExtents::computeExtents()
 		{
 
 		dxfpoly = dll->returnPolyLine();
-		//dxfpoly = dxfpoly->head;
 		while (dxfpoly)
 			{
 
@@ -644,8 +639,6 @@ void DXFImageExtents::computeExtents()
 				xcoor = atof(dxfpoly->xcoor)*scale;
 				ycoor = atof(dxfpoly->ycoor)*scale;
 
-			//sprintf(text,"%s,%s\n",dxfpoly->xcoor,dxfpoly->ycoor);
-			//fio.fileWrite(&fio,text,1);
 			if (extentslockout == 0)
 				{
 				pt.left = pt.right = xcoor; pt.top = pt.bottom = ycoor;
@@ -658,14 +651,8 @@ void DXFImageExtents::computeExtents()
 			}
 		}
 	else if (t == invalidline);
-  /*	if (temp2 == 1)
-		{
-		cw = !cw;  //reset cw to ccw || ccw to cw
-		temp2 = 0;
-		}*/
 		D(cout<<"compute extents587"<<endl);
 	}	while (dll = dll->incrementNode());
-
  }
 
 

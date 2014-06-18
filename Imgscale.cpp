@@ -30,7 +30,7 @@ imageScaling::imageScaling(double Left, double Top, double Right, double Bottom)
 
 float imageScaling::computeScale(double Left, double Top, double Right, double Bottom)
 {
-    char temp[256];
+
     double horizontalDim, verticalDim;
     double horizontalDimVwr, verticalDimVwr;
     double hRatio, vRatio;
@@ -53,16 +53,8 @@ float imageScaling::computeScale(double Left, double Top, double Right, double B
         {
             scaleFactor = verticalDimVwr/verticalDim;
         }
-        //sprintf(temp,"%f,%f", horizontalDimVwr,horizontalDim);
-        //MessageBox(NULL,temp,"",MB_OK);
         float retval = fabs(scaleFactor);
         return retval;
     }
-    /*else
-    	{
-                if (verticalDim > horizontalDim)
-    		scaleFactor = verticalDimVwr/verticalDim;
-                else
-    	    	scaleFactor = horizontalDimVwr/horizontalDim;
-                }*/
+
 }

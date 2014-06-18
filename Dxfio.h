@@ -19,13 +19,10 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include "fileio.h"
 #include <windows.h>
-//#include <iostream.h>
 #include <fstream>
 #ifndef DXFIO_H
 #define DXFIO_H
 const int NUMBLOCKS = 10000;
-//const long int BLOCKSIZE = 32767;
-
 #define TEXTLINE_SIZE 256
 class DXFio: public fileIO
 	{
@@ -35,14 +32,12 @@ long int MAXBLOCKSIZE;
 		long int fileLength;
 		char * ptr[NUMBLOCKS];
 	public:
-		  //friend char * DXFIdentEntity::parsePtrToData();
 		int returnCount(){return numblocks-1;}
 	~DXFio()
 		{
 		int j = 0;
 		while (j<=arrayIdx)
 			{
-			//delete[] ptr[j];
 			delete[] ptr[j];
 			j++;
 			}
@@ -54,10 +49,6 @@ long int MAXBLOCKSIZE;
 			delete fin;
 			fin = NULL;
 			}
-		//_lclose(hfile);
-		//cout<<"destructor called"<<endl;
-		//if (!close(fio));
-		//cout<<"handle closed"<<endl;
 		}
 
 
@@ -101,12 +92,10 @@ long int MAXBLOCKSIZE;
 
 			Fin.close();
 			numblocks =  (int)fileLength / (MAXBLOCKSIZE-1024);
-			//cout<<numblocks<<endl;
 			fin = new ifstream(name);
 		}
 
 	char * returnPointer( int k ){ return ptr[k]; }
-//	int checkRecordExist(char* string) {};
 	int fileRead();
 	} ;
 #endif

@@ -39,8 +39,7 @@ class DXFImageExtents
 	DXFLinkList* dll;
 	RECTEXTENTS pt,pt1;
 	public:
-     //DXFImageExtents(){};
-	DXFImageExtents(DXFLinkList* DLL):dll(DLL){left=10000000;top=-10000000; bottom=10000000;  right=-10000000;scale =1;}
+   DXFImageExtents(DXFLinkList* DLL):dll(DLL){left=10000000;top=-10000000; bottom=10000000;  right=-10000000;scale =1;}
 
 	RECTEXTENTS* returnDXFImageExtents(){return &pt;}
 	void computeExtents();
@@ -54,11 +53,10 @@ class DXFImageExtents
 		}
 	void resetCoordinates()
 		{
-		left = top = bottom = top = 0.0;
+		this->left = this->top = this->bottom = this->top = 0.0;
 		}
 	void assignment(float Right, float Left, float Top, float Bottom)
 		{
-		//cout<<"assignment 22"<<endl;
 		if (right < Right)
 			{
 			right = Right;
@@ -107,10 +105,8 @@ class DXFImageExtents
 		return(10);
 	else
 		{
-
 		return(-1);
 		}
-	//cout<<"assignment 69"<<endl;
 	}
 
 void	assignPrivatePtr(DXFLinkList * DXFLL){dll = DXFLL;}

@@ -1,0 +1,91 @@
+# depslib dependency file v1.0
+1402645983 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfiden1.cpp
+	"dxfident.h"
+
+1403123088 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfident.h
+	<windows.h>
+	<stdlib.h>
+	<string.h>
+	"dxfstrct.h"
+	<iostream>
+
+1402645983 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfstrct.h
+
+1403122538 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.cpp
+	<iostream>
+	<string.h>
+	"dxfio.h"
+	<ctype.h>
+
+1403123173 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.h
+	"fileio.h"
+	<windows.h>
+	<fstream>
+
+1403124159 c:\users\x550ca-db51\documents\github\dxf_link_library\fileio.h
+	<stdio.h>
+	<io.h>
+	<dos.h>
+	<string.h>
+	<sstream>
+	<fcntl.h>
+	<fstream>
+
+1403122321 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxflist.cpp
+	"dxflist.h"
+	<string.h>
+	<math.h>
+	<windows.h>
+	<stdio.h>
+	<conio.h>
+	<iostream>
+	<stdlib.h>
+
+1403124429 c:\users\x550ca-db51\documents\github\dxf_link_library\dxflist.h
+	<windows.h>
+	<iostream>
+	"dxfstrct.h"
+	<stdio.h>
+
+1403124381 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfxtnt2.cpp
+	<windows.h>
+	"dxfextnt.h"
+	<math.h>
+	"fileio.h"
+
+1403124159 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfextnt.h
+	"dxflist.h"
+
+1403124159 source:c:\users\x550ca-db51\documents\github\dxf_link_library\imgscale.cpp
+	"imgscale.h"
+	<iostream>
+	<windows.h>
+
+1402645983 c:\users\x550ca-db51\documents\github\dxf_link_library\imgscale.h
+	<math.h>
+
+1402645983 source:c:\users\x550ca-db51\documents\github\dxf_link_library\imgxlate.cpp
+	"imgxlate.h"
+
+1402645983 c:\users\x550ca-db51\documents\github\dxf_link_library\imgxlate.h
+	<windows.h>
+
+1403123870 source:c:\users\x550ca-db51\documents\github\dxf_link_library\main.cpp
+	"main.h"
+
+1403123865 c:\users\x550ca-db51\documents\github\dxf_link_library\main.h
+	<windows.h>
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<vector>
+	"dxfident.h"
+	"dxfio.h"
+	"dxflist.h"
+	"dxfextnt.h"
+	"IMGSCALE.H"
+	"IMGXLATE.H"
+

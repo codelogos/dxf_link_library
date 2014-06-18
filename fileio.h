@@ -33,35 +33,25 @@ class fileIO
 protected:
     int fio;
     char name[256];
-    //const char rwAccess[128];
     char  * ptr;
 public:
     fileIO(const char* name, unsigned int rwaccess)
     {
-        //char* p = (char*)rwAccess;
         strcpy(fileIO::name,name);
-        //if (!strstr(rwAccess,rwaccess) || rwAccess == " ")
-        //	fio = open(name,O_APPEND);//this should really be an error, however
-        //constructors don't have return values
-        //else
         fio = open(name,rwaccess);
-        //cout<<fio<<" 1fio"<<endl;
         strcpy(fileIO::name, name);
         ptr = NULL;
     }
     ~fileIO()
     {
-        //MessageBox(NULL,"fileio dtor","",MB_OK);
         if (ptr)
         {
-
-            delete ptr;
-            ptr = NULL;
-
+        delete ptr;
+        ptr = NULL;
         }
         close(fio);
-
     }
+
     int fileWrite(char*  input)
     {
         ofstream fout(name,ios::app);
@@ -78,7 +68,6 @@ public:
         ofstream fout(name,ios::app);
         std::stringstream str;
         str<<input;
-        //cout<<string<<" filename"<<endl;
         if (fout<<str.str()<<endl)
         {
             fout.close();
@@ -86,17 +75,10 @@ public:
         }
         fout.close();
         return 0;
-        /*cout<<fIO->fio<<" hi"<<endl;
-                //cin.get();
-                cout<<string<<" "<<length<<" string length"<<endl;
-        if(write(fIO->fio,string,length) != -1)
-        	return 0;
-                cout<<"failure"<<endl;
-        return 1;*/
     }
 
-    virtual int checkRecordExist(char * string){} ;
-    virtual int fileRead() {};
+    virtual int checkRecordExist(char * string){return 0;} ;
+    virtual int fileRead() {return 0;};
 
 };
 

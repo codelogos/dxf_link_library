@@ -27,6 +27,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <vector>
 #include "dxfident.h"
 #include "dxfio.h"
 #include "dxflist.h"
@@ -37,20 +38,17 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #define DLLEXPORT __declspec(dllexport)
 #define MAXBUFFER 256
 
+using namespace std;
+
+
 typedef struct
 		{
 		double dx,dy;
 		} deltaXY;
 
-
-using namespace std;
-
-
 char imgExtents[MAXBUFFER];
 char entityBuffer[MAXBUFFER];
 char deltaScale[MAXBUFFER];
-
-BSTR glb_bstr = NULL;
 
 enum {CIRCLE,LINE,ARC,POLYLINE};
 
@@ -65,19 +63,23 @@ DXFio* dIO;
 DXFLinkList* dlink, *tmplink;
 DXFImageExtents* dxfextents;
 
+string dataReturn;
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-void DLLEXPORT readInAndBuildList(char *);
+#define DllExport   __declspec( dllexport )
+
+DllExport bool buildEntities(char *);
 void computeExtents();
-BSTR DLLEXPORT returnExtents();
-BSTR DLLEXPORT returnEntity();
-BSTR DLLEXPORT returnScaleDelta(double,double,double,double);
-bool DLLEXPORT incrementNode();
-void DLLEXPORT resetList();
-void DLLEXPORT cleanUp();
+DllExport char* returnExtents();
+DllExport char* returnEntity();
+DllExport bool getNextEntity();
+DllExport char* returnScaleDelta(double,double,double,double);
+DllExport void reset();
+DllExport void cleanUp();
 #ifdef __cplusplus
 }
 #endif
