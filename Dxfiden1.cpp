@@ -17,31 +17,24 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
+
 #include "dxfident.h"
-//#include <fileio.h>
-//extern int parselockout;
+
 int DXFIdentEntity::parsePtrToData()
 {
     char ch;
     static const char entities[6][9] = {{"CIRCLE"},{"LINE"},{"ARC"},{"POLYLINE"},{"VERTEX"}};
-    //	cout<<"14 dxfiden1"<<endl;
+
     char test[20];
-//       fileIO fio("F:\\bc45\\bin\\chucky.txt",O_APPEND);
-    //	fio.fileWrite(&fio,tptr,1);
+
     if (lockout == 0)
     {
-//cout<<lockout<<" lockout"<<endl;
-
-        //fio.fileWrite(&fio,tptr,0);
-        //fio.fileWrite(&fio,"\n\n\n\n\n",0);
-
         ptrToEntities = strstr(tptr,"ENTITIES");
         ptrToEOF = strstr(tptr,"EOF");
         ptrToBlkEnd = strstr(tptr,"~");
 
         if (ptrToEOF == NULL && ptrToBlkEnd == NULL)
         {
-            //cout<<"runaway"<<endl;
             return -1;      //prevents runaway pointers
         }
         if (ptrToEntities == NULL && entityLockout != 0)
@@ -109,9 +102,6 @@ int DXFIdentEntity::parsePtrToData()
         goto POINT;
     else if (strstr(start,"E+"))
         goto POINT;
-
-    //else if (!strncmp(start,entities[4], strlen(entities[4])))
-    //	t = vertex;
     else if (strstr(start,"POINT")) // this is needed to account for POINT
         goto POINT;						  // entities at the end of a DXF file
     else if (strstr(start,"EOF") - start < 30)
@@ -130,21 +120,16 @@ int DXFIdentEntity::parsePtrToData()
 
     while (*end >= 'A' && *end <= 'Z')// && end < ptrToEOF && end < ptrToBlkEnd)
     {
-        //cout<<*end;
         end++;
         if (end == ptrToEOF)
         {
-            //cout<<"61"<<endl;
             lockout = 0;
-            //cout<<"62 panic"<<endl;
-            //cin.get();
             if (tempEntSize < (end - start))
             {
                 tempEntity = (char *) realloc(tempEntity, end - start );
                 tempEntSize =  end - start;
                 memset(tempEntity,'\0', end - start);
             }
-            //fio.fileWrite(&fio,tempEntity,1);
             memcpy((char *)(tempEntity),start,end - start - 1);
             return 0;
         }
@@ -158,7 +143,6 @@ int DXFIdentEntity::parsePtrToData()
                 tempEntSize = end - start;
                 memset(tempEntity,'\0',end-start);
             }
-            //fio.fileWrite(&fio,tempEntity,1);
             memcpy((char *)(tempEntity),start,end - start - 1);
             return 2;
         }
@@ -166,28 +150,18 @@ int DXFIdentEntity::parsePtrToData()
 
     if (t == polyline || t == vertex)
     {
-        /*static int count;
-        count++;
-        if (count == 767)
-        	{
-        	int b ;
-        	b = 5;
-        	}*/
         while (strncmp(end,"SEQ",strlen("SEQ"))) //(*(end + 1) != 'S' && *(end + 2) != 'E' && *(end + 2) != 'Q'))//&& end != ptrToEOF)
         {
             end++;
             if (end == ptrToEOF)
             {
-                //cout<<"74"<<endl;
                 lockout = 0;
-                //cout<<"75 panic2"<<endl;
                 if (tempEntSize < (end - start))
                 {
                     tempEntity = (char *) realloc(tempEntity, end - start );
                     tempEntSize = end - start;
                     memset(tempEntity,'\0',end-start);
                 }
-                //fio.fileWrite(&fio,tempEntity,1);
                 memcpy((char *)(tempEntity),start,end - start - 1);
                 return 0;
             }
@@ -200,7 +174,6 @@ int DXFIdentEntity::parsePtrToData()
                     tempEntSize = end - start;
                     memset(tempEntity,'\0',end - start);
                 }
-                //fio.fileWrite(&fio,tempEntity,1);
                 memcpy((char *)(tempEntity),start,end - start - 1);
                 return 2;
             }
@@ -229,7 +202,6 @@ int DXFIdentEntity::parsePtrToData()
 
             end++;
 
-            //cout<<*end;
             if (ptrToEOF)
             {
                 if ((end+1) >= ptrToEOF)
@@ -241,7 +213,6 @@ int DXFIdentEntity::parsePtrToData()
                         memset(tempEntity,'\0',end-start);
                         tempEntSize = end - start;
                     }
-                    //	fio.fileWrite(&fio,tempEntity,1);
                     memcpy((char *)(tempEntity),start,end - start - 1);
                     return 0;
                 }
@@ -249,23 +220,16 @@ int DXFIdentEntity::parsePtrToData()
             else if ((end +1) >= ptrToBlkEnd)
             {
                 lockout = 0;
-                //cout<<"97"<<endl;
-                //printf("%p\n",end);
-                //printf("%s",start);
-                //cin.get();
                 if (tempEntSize < (end - start))
                 {
                     tempEntity = (char *) realloc(tempEntity, end - start );
                     memset(tempEntity,'\0',end-start);
                     tempEntSize = end - start;
                 }
-                //	fio.fileWrite(&fio,tempEntity,1);
                 memcpy((char *)(tempEntity),start,end - start - 1);
                 return 2;
             }
         }
-    //	if (*(end+1) == 'P' && *(end + 2) == 'O' && *(end + 3) == 'I')
-    //		int p = 1;
     if (tempEntity == NULL)
     {
         if (end - start > 32767)
@@ -277,8 +241,6 @@ int DXFIdentEntity::parsePtrToData()
         memset(tempEntity,'\0',end-start);
         if (tempEntity == NULL)
         {
-            //cout<<"105 panic"<<endl;
-            //cin.get();
             return 0;
         }
         tempEntSize = end - start;
@@ -290,38 +252,21 @@ int DXFIdentEntity::parsePtrToData()
         tempEntSize = end - start;
         if (tempEntity == NULL)
         {
-            //cout<<"117 panic"<<endl;
-            //cin.get();
             return 0;
         }
     }
     char chr;
     chr = *end;
-    //*end = '\0';
-    //int L = strlen(start);
-    //sprintf(test,"st:%p,en:%p",start,end);
-    //fio.fileWrite(&fio,test,1);
-    //sprintf(test,"%d",end - start - 1);
-    //fio.fileWrite(&fio,test,1);
 
     memcpy((char *)(tempEntity),start,end - start -1);
 
     start = end;
-    //if (strstr(end,"~") - end > 0)
-    //	printf("%d",strstr(end,"~") - end);
-    //cout<<strstr(end,"~") - end<<"   "<<*ptrToBlkEnd<<endl;
-    //fio.fileWrite(&fio,tempEntity,1);
-    //printf("%p\n",strstr(end,"~")-1);
-    //printf("%p,%p",end,ptrToBlkEnd);
-    //cin.get();
 
     if (ptrToEOF)
     {
         if (start >= ptrToEOF)
         {
             lockout = 0;
-            //cout<<"ptr to eof"<<endl;
-            //cin.get();
             return 0;
         }
         else
@@ -329,14 +274,11 @@ int DXFIdentEntity::parsePtrToData()
     }
     else if (start >= ptrToBlkEnd)
     {
-        //cout<<"ptr to ~"<<endl;
-        //cin.get();
         lockout = 0;
         return 2;
     }
     else
     {
-        //cout<<"panic panic"<<endl;
         return 1;
     }
 }

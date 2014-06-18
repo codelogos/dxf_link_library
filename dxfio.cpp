@@ -25,8 +25,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #define PAD 256
 int DXFio::fileRead()
 {
-    unsigned long int flength, numbytes;
-    char *tmpptr;
+
+
     static int section, entities, entityfound;
     static int flag;
 
@@ -34,7 +34,7 @@ int DXFio::fileRead()
     char ch;
     char textline[256]={'\n'};
     char *temp;
-    long int i = 0, n = 0, totalbytes=0;
+    long int i = 0, totalbytes=0;
     if (ptr[0] == NULL)
     {
         ptr[0] = new char[MAXBLOCKSIZE+1];

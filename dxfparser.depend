@@ -17,7 +17,7 @@
 	"dxfio.h"
 	<ctype.h>
 
-1403123173 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.h
+1403125836 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.h
 	"fileio.h"
 	<windows.h>
 	<fstream>
@@ -53,7 +53,7 @@
 	<math.h>
 	"fileio.h"
 
-1403124159 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfextnt.h
+1403128354 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfextnt.h
 	"dxflist.h"
 
 1403124159 source:c:\users\x550ca-db51\documents\github\dxf_link_library\imgscale.cpp
