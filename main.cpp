@@ -19,7 +19,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include "main.h"
 
- bool buildEntities(char * name)
+ void buildEntities(char * name)
 {
     dIO = new DXFio(name,ios::app);//(const char *const) argv[1],1);//"c:\\98\\bh517.dxf",1);//cowbo379.dxf",1);
     dlink = new DXFLinkList();

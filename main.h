@@ -72,7 +72,7 @@ extern "C"
 
 #define DllExport   __declspec( dllexport )
 
-DllExport bool buildEntities(char *);
+DllExport void buildEntities(char *);
 void computeExtents();
 DllExport char* returnExtents();
 DllExport char* returnEntity();

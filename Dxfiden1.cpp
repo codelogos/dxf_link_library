@@ -22,10 +22,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 int DXFIdentEntity::parsePtrToData()
 {
-    char ch;
-    static const char entities[6][9] = {{"CIRCLE"},{"LINE"},{"ARC"},{"POLYLINE"},{"VERTEX"}};
 
-    char test[20];
+    static const char entities[6][9] = {{"CIRCLE"},{"LINE"},{"ARC"},{"POLYLINE"},{"VERTEX"}};
 
     if (lockout == 0)
     {
@@ -60,7 +58,7 @@ int DXFIdentEntity::parsePtrToData()
         lockout = 1;
     }
 
-    while (*(start)< 'A' || *(start) > 'Z' && start != ptrToEOF && start != ptrToBlkEnd || *start == 'D')
+    while ((*(start)< 'A' || *(start) > 'Z') && start != ptrToEOF && start != ptrToBlkEnd || *start == 'D')
     {
     POINT:
         IGNOREENTITY("POINT");//if we find a POINT entity, bypass it and keep looking
@@ -79,11 +77,6 @@ int DXFIdentEntity::parsePtrToData()
     }
     static int count;
     count++;
-    /*		if (count == 620)
-       		{
-       		int b;
-       		b =5;
-       		}*/
 
 
     if (!strncmp(start,"CIRCLE",strlen(entities[0])))
@@ -255,8 +248,6 @@ int DXFIdentEntity::parsePtrToData()
             return 0;
         }
     }
-    char chr;
-    chr = *end;
 
     memcpy((char *)(tempEntity),start,end - start -1);
 
