@@ -17,6 +17,7 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
+
 #include "dxflist.h"
 #include <string.h>
 #include <math.h>
@@ -41,59 +42,37 @@ DXFLinkList::DXFLinkList()
     dline = NULL;
     dcircle = NULL;
     entityLength = 0;
-    plCurrent = plTemp =	plHead = plTail = NULL;
+    plCurrent = plTemp = plHead = plTail = NULL;
     if (refcount > 0)
     {
         darc = new DXFarc;
-
         dline = new DXFline;
-
         dcircle = new DXFcircle;
     }
     refcount++;
-    //dpoly = new DXFpolyline;
 }
 
 DXFLinkList::~DXFLinkList()
 {
-    /*static int i;
-    fileIO fio("c:\\crapola.txt",O_APPEND);
-    char buffer[128];*/
-    //cout<<"destructor called"<<endl;
     refcount--;
-    if (darc)
-        delete darc;
-    if (dline)
-        delete dline;
-    if (dcircle)
-        delete dcircle;
-    while (plHead)
-    {
-        plTemp = plHead->next;
-        delete plHead;
-        plHead = plTemp;
-    }
 
     while (dllHead)
     {
+        if (dllHead->plHead)
+            while (plHead)
+                {
+                plTemp = plHead->next;
+                delete plHead;
+                plHead = plTemp;
+                }
 
-        //	fio.fileWrite(&fio,itoa(i,buffer,10),O_APPEND);
-        //MessageBox(NULL,"43","",MB_OK);
+        delete dllHead->dline;
+        delete dllHead->darc;
+        delete dllHead->dcircle;
         temp = dllHead->next;
-        //MessageBox(NULL,"45","",MB_OK);
-        /*delete head->darc;
-        delete head->dline;
-        delete head->dcircle;*/
-//		if (head->plHead)
-//			plHead->~DXFpolyline(plHead);
         delete dllHead;
-        //count--;
-        //cout<<head->next<<endl;
-        //cout<<"node deleted count:"<<count<<endl;
-        //MessageBox(NULL,"47","",MB_OK);
         dllHead=temp;
     }
-    //cout<<refcount<<endl;
 }
 
 int DXFLinkList::isVertexJoined(DXFLinkList *dll)
@@ -128,26 +107,18 @@ void DXFLinkList::addnode(type t, char* ctemp)
     }
     else
     {
-        //cout<<"got to line 80"<<endl;
         dllTemp->next = temp;
         temp->prev = dllTemp;
         temp->current = dllTemp->current;
         dllTemp = temp;
         dllTail = temp;
-        //cout<<"previous node"<<temp->prev<<endl;
-        //cin.get();
-        //	printf("previous node next:%p\n",temp->prev->next);
-        //printf("current node:%p\n",temp);
-        //for(long int z=0; z< 100000000;z++);
     }
 
-//	joinVertex = 0;
     dllTemp->entityLength = 0;
     dllTemp->entityType = t;
-    //cout<<"^^^^^^^"<<temp->entityType<<" &&&&*****:"<<endl;
+
     if (t == polyline)// || t == vertex)
     {
-        //MessageBox(NULL,ctemp,"",MB_OK);
         char enttemp[4][11] = {{" 10 "},{" 20 "},{"CONTINUOUS"},{"SEQ"}};
         char *p;
         char lastXVal[30], lastYVal[30];
@@ -159,8 +130,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
                 dllTemp->plHead = new DXFpolyline();
                 dllTemp->plTemp = dllTemp->plHead;
                 dllTemp->plTail = dllTemp->plHead;
-                //if (t == vertex)
-                //	dllTemp->plHead->joinVertex = 1;
             }
             else
             {
@@ -193,12 +162,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
                 *_temp = ' ';
                 if (i == 0)
                 {
-                    //memccpy(pl->xcoor,temp2, ' ', strlen(temp2));
-                    /*if (strstr(temp2,"-2.622201"))
-                    	{
-                    	int b;
-                    	b = 12;
-                    	}*/
                     strcpy(dllTemp->plTemp->xcoor,temp2);
                     strcpy(lastXVal,temp2);
                 }
@@ -210,7 +173,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
             }
             if (tptr)
                 ctemp = tptr+2;
-
         }
         while (strstr(p,enttemp[3]) - strstr(p,enttemp[1]) > 30);
         dllTemp->plTemp = dllTemp->plHead;
@@ -230,12 +192,9 @@ void DXFLinkList::addnode(type t, char* ctemp)
                                                      atof(lastYVal));
                 strcpy(lastXVal,dllTemp->plTemp->xcoor);
                 strcpy(lastYVal,dllTemp->plTemp->ycoor);
-
             }
             dllTemp->plTemp = dllTemp->plTemp->next;
         }
-        //sprintf(lastXVal,"%f",totalPolyLength);
-        //MessageBox(NULL,lastXVal,"",MB_OK);
         dllTemp->entityLength = totalPolyLength;
         i = totalPolyLength = 0;
     }
@@ -245,14 +204,11 @@ void DXFLinkList::addnode(type t, char* ctemp)
         char enttemp[5][5] = {{" 10 "},{" 20 "},{" 40 "},{" 50 "},{" 51 "}};
         for (int i = 0; i<5; i++)
         {
-
             p = strstr(ctemp,enttemp[i]);//dcircle->ParseValue[i+1]);
 
             if (p == NULL)
             {
-
                 dtemp = 0;
-                //logerr
             }
             else
             {
@@ -268,42 +224,29 @@ void DXFLinkList::addnode(type t, char* ctemp)
                 dllTemp->darc->xcenter=dtemp;
                 D(sprintf(temp2,"%f",dllTemp->darc->xcenter));
                 D(fio.fileWrite(&fio,temp2,1));
-
-                //fio.fileWrite(&fio,ctemp,1);
                 break;
             case 1:
                 dllTemp->darc->ycenter=dtemp;
                 D(sprintf(temp2,"%f",dllTemp->darc->ycenter));
                 D(fio.fileWrite(&fio,temp2,1));
-
-                //fio.fileWrite(&fio,ctemp,1);
                 break;
-
             case 2:
                 dllTemp->darc->radius=dtemp;
                 D(sprintf(temp2,"%f",dllTemp->darc->radius));
                 D(fio.fileWrite(&fio,temp2,1));
-
-                //fio.fileWrite(&fio,ctemp,1);
                 break;
             case 3:
                 dllTemp->darc->startangle=dtemp;
                 D(sprintf(temp2,"%f",dllTemp->darc->startangle));
                 D(fio.fileWrite(&fio,temp2,1));
-
-                //fio.fileWrite(&fio,ctemp,1);
                 break;
             case 4:
                 dllTemp->darc->endangle=dtemp;
                 D(sprintf(temp2,"%f",dllTemp->darc->endangle));
                 D(fio.fileWrite(&fio,temp2,1));
-
-                //fio.fileWrite(&fio,ctemp,1);
                 break;
             }
-
-
-        }
+       }
         dllTemp->entityLength = computeArcLength(dllTemp->darc->radius,
                                 dllTemp->darc->startangle,
                                 dllTemp->darc->endangle);
@@ -364,12 +307,11 @@ void DXFLinkList::addnode(type t, char* ctemp)
         for (int i = 0; i<3; i++)
         {
             char enttemp[3][5] = {{" 10 "},{" 20 "},{" 40 "}};
-            p = strstr(ctemp,&enttemp[i][0]);//dcircle->ParseValue[i+1]);
+            p = strstr(ctemp,&enttemp[i][0]);
 
             if (p == NULL)
             {
                 dtemp = 0;
-                //logerr
             }
             else
             {
@@ -412,7 +354,7 @@ double DXFLinkList::computeArcLength(double radius,double startangle, double end
 
 }
 
-double DXFLinkList::computeLineLength(double xstart,double xend, double ystart, double yend)
+double DXFLinkList::computeLineLength(double xstart, double xend, double ystart, double yend)
 {
     static double length;
     double dx,dy;

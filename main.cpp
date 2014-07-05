@@ -19,9 +19,10 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include "main.h"
 
- void buildEntities(char * name)
+void buildEntities(const char * const name)
 {
-    dIO = new DXFio(name,ios::app);//(const char *const) argv[1],1);//"c:\\98\\bh517.dxf",1);//cowbo379.dxf",1);
+
+    dIO = new DXFio(name,ios::app);
     dlink = new DXFLinkList();
 
     DXFIdentEntity * dxfIdent;
@@ -63,9 +64,7 @@ char* returnExtents()
     ossImgExtents<<rc->left<<","<<rc->top<<","<<rc->right<<","<<rc->bottom;
     dataReturn = ossImgExtents.str();
     char* ptr =(char *)dataReturn.c_str();
-
     return ptr;
-
 }
 
 char* returnEntity()
@@ -73,11 +72,10 @@ char* returnEntity()
     DXFarc *Arc;
     DXFline *Line;
     DXFcircle *Circle;
-    DXFpolyline *pl;
+    DXFpolyline *Polyline;
 
-
+    string polyLineResult="";
     std::vector<std::string> vecPoly;
-
     std::ostringstream ossEntity;
 
     if (tmplink->entityType == CIRCLE)
@@ -95,32 +93,33 @@ char* returnEntity()
 
     if (tmplink->entityType == ARC)
     {
-        //fileIO fio("test.txt",0);
         Arc = tmplink->returnArc();
         ossEntity<<"Arc,"<<Arc->startangle<<","<<Arc->endangle<<","<<Arc->radius<<","<<Arc->xcenter<<","<<Arc->ycenter;
     }
 
     if (tmplink->entityType == POLYLINE)
     {
-
-
-        pl = tmplink->returnPolyLine();
+        Polyline = tmplink->returnPolyLine();
         do
         {
             static int reset;
 
-            if (pl->next == NULL)
-                reset = 1;
-            else
-                reset = 0;
-            vecPoly.push_back(pl->xcoor);
+            vecPoly.push_back(Polyline->xcoor);
             vecPoly.push_back(",");
-            vecPoly.push_back(pl->ycoor);
+            vecPoly.push_back(Polyline->ycoor);
+            vecPoly.push_back(",");
         }
-        while (pl = pl->next);
-    }
+        while (Polyline = Polyline->next);
+    polyLineResult += "Polyline,";
 
-    dataReturn = ossEntity.str();
+    for (vector<string>::iterator it = vecPoly.begin();it!=vecPoly.end();++it)
+        polyLineResult += *it;
+        polyLineResult += ",";
+    }
+    if (polyLineResult.length() > 0)
+        dataReturn = polyLineResult;
+    else
+        dataReturn = ossEntity.str();
 
     char *ptr = (char*) dataReturn.c_str();//return ossEntity.str();
     return ptr;
@@ -129,7 +128,6 @@ char* returnEntity()
 void reset()
 {
     tmplink = dlink->returnHead();
-
 }
 
 bool getNextEntity()
@@ -147,8 +145,7 @@ void cleanUp()
 {
     delete dIO;
     delete dlink;
-    if (dxfextents)
-        delete dxfextents;
+    delete dxfextents;
 }
 
 char* returnScaleDelta(double Left, double Top, double Right, double Bottom)

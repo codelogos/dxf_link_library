@@ -24,6 +24,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include <stdio.h>
 #ifndef DXFLIST_H
 #define DXFLIST_H
+#include <iostream>
+#include <stdlib.h>
+
 extern double scaleValue;
 static int refcount;
 class DXFLinkList
@@ -36,6 +39,7 @@ class DXFLinkList
 	DXFpl *plTemp,*plHead,*plTail,*plCurrent;
 	int joinVertex;
     DXFLinkList* dllHead, * dllTail,* dllTemp;
+
 	public:
 
 	double entityLength;
@@ -50,27 +54,31 @@ class DXFLinkList
 
 	int isVertexJoined(DXFLinkList *dll);
 
-
 	type returnType() const
 					 {
 					 return this->entityType;
 					 };
+
 	DXFarc* returnArc() const
 		{
      	return this->darc;
 		};
+
 	DXFpolyline* returnPolyLine()
 		{
 		return this->plHead;
-		}
+		};
+
 	DXFline* returnSegment() const
 		{
 		return this->dline;
 		};
+
 	DXFcircle* returnCircle() const
 		{
 		return this->dcircle;
 		};
+
 	DXFpolyline* returnPolyLine() const
 		{
 		return this->plHead;
@@ -82,7 +90,6 @@ int isNextNodeNull()
 		return 1;
 	else
 		return 0;
-
 	}
 
 DXFLinkList* incrementNode() const

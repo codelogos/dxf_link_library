@@ -143,7 +143,7 @@ int DXFIdentEntity::parsePtrToData()
 
     if (t == polyline || t == vertex)
     {
-        while (strncmp(end,"SEQ",strlen("SEQ"))) //(*(end + 1) != 'S' && *(end + 2) != 'E' && *(end + 2) != 'Q'))//&& end != ptrToEOF)
+        while (strncmp(end,"SEQ",3)) //(*(end + 1) != 'S' && *(end + 2) != 'E' && *(end + 2) != 'Q'))//&& end != ptrToEOF)
         {
             end++;
             if (end == ptrToEOF)
@@ -190,8 +190,6 @@ int DXFIdentEntity::parsePtrToData()
                 while (*end >= 'A' && *end <= 'Z' ) //be removed and the subsequent
                     end++;									//entity processed
             }
-
-
 
             end++;
 
@@ -250,7 +248,6 @@ int DXFIdentEntity::parsePtrToData()
     }
 
     memcpy((char *)(tempEntity),start,end - start -1);
-
     start = end;
 
     if (ptrToEOF)

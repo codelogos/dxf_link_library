@@ -40,7 +40,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 using namespace std;
 
-
 typedef struct
 		{
 		double dx,dy;
@@ -72,7 +71,7 @@ extern "C"
 
 #define DllExport   __declspec( dllexport )
 
-DllExport void buildEntities(char *);
+DllExport void buildEntities(const char * const);
 void computeExtents();
 DllExport char* returnExtents();
 DllExport char* returnEntity();

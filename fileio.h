@@ -42,7 +42,7 @@ public:
         strcpy(fileIO::name, name);
         ptr = NULL;
     }
-    ~fileIO()
+    virtual ~fileIO()
     {
         if (ptr)
         {
