@@ -19,7 +19,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #ifndef DXFSTRCT_H
 #define DXFSTRCT_H
-enum type{circle,line,arc,polyline,vertex,invalidcircle,invalidline,invalidarc};
+enum type{circle,lwpolyline,polyline,line,arc,vertex,invalidcircle,invalidline,invalidarc};
 
 typedef struct
         {
@@ -44,6 +44,7 @@ typedef struct DXFpolyline
 	{
 	DXFpolyline* prev,* next,* temp;
 	int joinVertex;
+	bool closed;
 	char xcoor[64],ycoor[64];
 	DXFpolyline()
 		{

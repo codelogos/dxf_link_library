@@ -1,28 +1,32 @@
 # depslib dependency file v1.0
-1403136034 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfiden1.cpp
+1406854555 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfiden1.cpp
 	"dxfident.h"
+	"fileio.h"
 
-1403123088 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfident.h
+1406702472 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfident.h
 	<windows.h>
 	<stdlib.h>
 	<string.h>
+	<deque>
 	"dxfstrct.h"
 	<iostream>
 
-1402645983 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfstrct.h
+1406860144 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfstrct.h
 
-1403128432 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.cpp
+1406674423 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.cpp
 	<iostream>
 	<string.h>
+	<ctime>
 	"dxfio.h"
 	<ctype.h>
 
-1403125836 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.h
+1406674423 c:\users\x550ca-db51\documents\github\dxf_link_library\dxfio.h
 	"fileio.h"
 	<windows.h>
 	<fstream>
+	<deque>
 
-1403311979 c:\users\x550ca-db51\documents\github\dxf_link_library\fileio.h
+1405581430 c:\users\x550ca-db51\documents\github\dxf_link_library\fileio.h
 	<stdio.h>
 	<io.h>
 	<dos.h>
@@ -31,7 +35,7 @@
 	<fcntl.h>
 	<fstream>
 
-1404432738 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxflist.cpp
+1406961861 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxflist.cpp
 	"dxflist.h"
 	<string.h>
 	<math.h>
@@ -41,15 +45,16 @@
 	<iostream>
 	<stdlib.h>
 
-1404427709 c:\users\x550ca-db51\documents\github\dxf_link_library\dxflist.h
+1406962925 c:\users\x550ca-db51\documents\github\dxf_link_library\dxflist.h
 	<windows.h>
 	<iostream>
 	"dxfstrct.h"
+	"fileio.h"
 	<stdio.h>
 	<iostream>
 	<stdlib.h>
 
-1403124381 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfxtnt2.cpp
+1406704104 source:c:\users\x550ca-db51\documents\github\dxf_link_library\dxfxtnt2.cpp
 	<windows.h>
 	"dxfextnt.h"
 	<math.h>
@@ -72,10 +77,111 @@
 1402645983 c:\users\x550ca-db51\documents\github\dxf_link_library\imgxlate.h
 	<windows.h>
 
-1404426813 source:c:\users\x550ca-db51\documents\github\dxf_link_library\main.cpp
+1406703510 source:c:\users\x550ca-db51\documents\github\dxf_link_library\main.cpp
 	"main.h"
+	"fileio.h"
+	<ctime>
 
-1404343425 c:\users\x550ca-db51\documents\github\dxf_link_library\main.h
+1406589976 c:\users\x550ca-db51\documents\github\dxf_link_library\main.h
+	<windows.h>
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<vector>
+	"dxfident.h"
+	"dxfio.h"
+	"dxflist.h"
+	"dxfextnt.h"
+	"IMGSCALE.H"
+	"IMGXLATE.H"
+
+1406698878 source:c:\viewer\dxf_link_library\dxfiden1.cpp
+	"dxfident.h"
+	"fileio.h"
+
+1406698872 c:\viewer\dxf_link_library\dxfident.h
+	<windows.h>
+	<stdlib.h>
+	<string.h>
+	<deque>
+	"dxfstrct.h"
+	<iostream>
+
+1406582509 c:\viewer\dxf_link_library\dxfstrct.h
+
+1405577830 c:\viewer\dxf_link_library\fileio.h
+	<stdio.h>
+	<io.h>
+	<dos.h>
+	<string.h>
+	<sstream>
+	<fcntl.h>
+	<fstream>
+
+1406670823 source:c:\viewer\dxf_link_library\dxfio.cpp
+	<iostream>
+	<string.h>
+	<ctime>
+	"dxfio.h"
+	<ctype.h>
+
+1406670823 c:\viewer\dxf_link_library\dxfio.h
+	"fileio.h"
+	<windows.h>
+	<fstream>
+	<deque>
+
+1406700081 source:c:\viewer\dxf_link_library\dxflist.cpp
+	"dxflist.h"
+	<string.h>
+	<math.h>
+	<windows.h>
+	<stdio.h>
+	<conio.h>
+	<iostream>
+	<stdlib.h>
+
+1405896399 c:\viewer\dxf_link_library\dxflist.h
+	<windows.h>
+	<iostream>
+	"dxfstrct.h"
+	"fileio.h"
+	<stdio.h>
+	<iostream>
+	<stdlib.h>
+
+1403120781 source:c:\viewer\dxf_link_library\dxfxtnt2.cpp
+	<windows.h>
+	"dxfextnt.h"
+	<math.h>
+	"fileio.h"
+
+1403124754 c:\viewer\dxf_link_library\dxfextnt.h
+	"dxflist.h"
+
+1403120559 source:c:\viewer\dxf_link_library\imgscale.cpp
+	"imgscale.h"
+	<iostream>
+	<windows.h>
+
+1402642383 c:\viewer\dxf_link_library\imgscale.h
+	<math.h>
+
+1402642383 source:c:\viewer\dxf_link_library\imgxlate.cpp
+	"imgxlate.h"
+
+1402642383 c:\viewer\dxf_link_library\imgxlate.h
+	<windows.h>
+
+1406699910 source:c:\viewer\dxf_link_library\main.cpp
+	"main.h"
+	"fileio.h"
+	<ctime>
+
+1406586376 c:\viewer\dxf_link_library\main.h
 	<windows.h>
 	<iostream>
 	<stdlib.h>

@@ -20,6 +20,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include <windows.h>
 #include <iostream>
 #include "dxfstrct.h"
+#include "fileio.h"
 //#define NULL 0
 #include <stdio.h>
 #ifndef DXFLIST_H
@@ -29,6 +30,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
 extern double scaleValue;
 static int refcount;
+static int entry;
 class DXFLinkList
 	{
 	char* block;
@@ -39,7 +41,7 @@ class DXFLinkList
 	DXFpl *plTemp,*plHead,*plTail,*plCurrent;
 	int joinVertex;
     DXFLinkList* dllHead, * dllTail,* dllTemp;
-
+    bool closed = false;
 	public:
 
 	double entityLength;
@@ -106,7 +108,7 @@ DXFLinkList* returnHead() const
 		return this->dllHead;
 		}
 
-	void addnode(type, char*);
+	void addnode(type,const char*);
 	void addnodepoly(char*);
 	void removenode(){};
 	};

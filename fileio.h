@@ -62,6 +62,7 @@ public:
             fout.close();
             return 1;
         }
+        return 0;
     }
     int fileWrite(float input)
     {

@@ -20,51 +20,44 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include <windows.h>
 #include <stdlib.h>
 #include <string.h>
+#include <deque>
 #include "dxfstrct.h"
 #include <iostream>
 extern char arctemp[6][4];
 extern char linetemp[5][5];
 extern char circletemp[4][7];
 extern char polytemp[4][9];
-#define IGNOREENTITY(x) if (strncmp(start,x,strlen(x)) == 0) start += strlen(x)
+using namespace std;
 class DXFIdentEntity
 {
-    int entityLockout;
-    int tempEntSize;
-    int lockout;
-    char* tempEntity,* start,* end,* tptr;
-    char* ptrToEntities,* ptrToEOF,* ptrToBlkEnd;
-    type t;
+    const string entities[6] = {"CIRCLE","LWPOLYLINE","POLYLINE","LINE","ARC","VERTEX"};
+    string entity;
+    type entityType;
+    static const size_t entitiesLen = sizeof(entities) / sizeof(entities[0]);
+    deque <string> *geometry;
 
 public:
     int parsePtrToData();
-    char* returnEntityData()
+    const char* returnEntityData()
     {
-        return (char *)tempEntity;
-    };
-    void assignCharPtr(char *tmp)
+
+        return entity.c_str();
+    }
+    void assignGeometry(deque <string>* _geometry)
     {
-        tptr = tmp;
+        geometry = _geometry;
     }
     type returnEntityType()
     {
-    return t;
+        return entityType;
     }
     ~DXFIdentEntity()
     {
-        entityLockout = 0;
-        if (tempEntity)
-        {
-            free(tempEntity);
-            tempEntity = NULL;
-        }
+
     }
 
     DXFIdentEntity()
     {
-        lockout = 0;
-        entityLockout = 0;
-        tempEntity = NULL;
-        ptrToEntities = ptrToEOF = ptrToBlkEnd = NULL;
+
     }
 };

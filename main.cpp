@@ -18,36 +18,64 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include "main.h"
+#include "fileio.h"
+#include <ctime>
 
 void buildEntities(const char * const name)
 {
-
+    //std::clock_t start;
+    //fileIO fio("c:/temp/profile.txt",ios::app);
+    //double duration;
     dIO = new DXFio(name,ios::app);
+  //  duration = (double) ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //fio.fileWrite("dio");
+    //fio.fileWrite(duration);
+
     dlink = new DXFLinkList();
+    //duration = (double) ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //fio.fileWrite("create link list");
+    //fio.fileWrite(duration);
+
 
     DXFIdentEntity * dxfIdent;
     dxfIdent = new DXFIdentEntity();
+//
+    //duration = (double) ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //fio.fileWrite("create ident entity");
+    //fio.fileWrite(duration);
+
 
     dIO->fileRead();
-    int j = 0, i = 0;
-    int m = dIO->returnCount();
 
-    while (j <= m)
-    {
-        dxfIdent->assignCharPtr(dIO->returnPointer(j));
+ //   duration = (double) ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //fio.fileWrite("reading input file");
+    //fio.fileWrite(duration);
+    short retVal;
+    //char ch[2];
+    dxfIdent->assignGeometry(dIO->returnGeometry());
+    //fio.fileWrite("assigned geometry");
+    //char ch[1];
         do
         {
-            i = dxfIdent->parsePtrToData();
 
-            if (i)
+            retVal = (int)dxfIdent->parsePtrToData();
+            //MessageBox(NULL,"retval","",MB_OK);
+            //MessageBox(NULL,itoa(retVal,ch,10),"",MB_OK);
+            if (retVal == 1)
             {
+                //MessageBox(NULL,"add node","",MB_OK);
                 dlink->addnode(dxfIdent->returnEntityType(),dxfIdent->returnEntityData());
             }
         }
-        while (i == 1);
-        j++;
-    }
+        while (retVal == 1);
+
+  //  duration = (double) ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //fio.fileWrite("parsing / adding node");
+    //fio.fileWrite(duration);
+
+
 tmplink = dlink->returnHead();
+
 }
 
 void computeExtents()
@@ -97,13 +125,12 @@ char* returnEntity()
         ossEntity<<"Arc,"<<Arc->startangle<<","<<Arc->endangle<<","<<Arc->radius<<","<<Arc->xcenter<<","<<Arc->ycenter;
     }
 
-    if (tmplink->entityType == POLYLINE)
+    if (tmplink->entityType == VERTEX || tmplink->entityType == POLYLINE || tmplink->entityType == LWPOLYLINE)
     {
         Polyline = tmplink->returnPolyLine();
         do
         {
             static int reset;
-
             vecPoly.push_back(Polyline->xcoor);
             vecPoly.push_back(",");
             vecPoly.push_back(Polyline->ycoor);
@@ -138,7 +165,6 @@ bool getNextEntity()
         return false;
     else
         return true;
-
 }
 
 void cleanUp()

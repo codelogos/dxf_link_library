@@ -49,7 +49,7 @@ char imgExtents[MAXBUFFER];
 char entityBuffer[MAXBUFFER];
 char deltaScale[MAXBUFFER];
 
-enum {CIRCLE,LINE,ARC,POLYLINE};
+enum {CIRCLE,LWPOLYLINE,POLYLINE,LINE,ARC,VERTEX};
 
 int extentslockout;
 

@@ -628,7 +628,7 @@ void DXFImageExtents::computeExtents()
 			}
 		}
 
-	else if (t == polyline)
+	else if (t == polyline || t == lwpolyline)
 		{
 
 		dxfpoly = dll->returnPolyLine();

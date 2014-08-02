@@ -19,183 +19,41 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include <iostream>
 #include <string.h>
-//#include <windows.h>
+#include <ctime>
 #include "dxfio.h"
 #include <ctype.h>
-#define PAD 256
+using namespace std;
 int DXFio::fileRead()
 {
 
+    bool section=false;
 
-    static int section, entities, entityfound;
-    static int flag;
-
-    long int prevByteSize;
-    char ch;
-    char textline[256]={'\n'};
-    char *temp;
-    long int i = 0, totalbytes=0;
-    if (ptr[0] == NULL)
+    std::string textline;
+    ifstream fin(name);
+    bool firstEntity = false;
+    while (std::getline(fin,textline).good())
     {
-        ptr[0] = new char[MAXBLOCKSIZE+1];
-        memset(ptr[0],'\0',MAXBLOCKSIZE+1);
-    }
-    while (fin->get(ch))
-    {
-        if (section == 0)
+    if (section == false)
         {
-            textline[i] = ch;
-            if (strstr(textline,"ENTITIES"))
+            if (textline =="ENTITIES")
             {
-                memset(textline,'\0',TEXTLINE_SIZE);
-                strcpy(textline,"ENTITIES");
-
-                i = 8;
-                section = 1;
-            }
-            i++;
-            if (i>=TEXTLINE_SIZE)
-            {
-                memset(textline,'\0',TEXTLINE_SIZE);
-                i=0;
-
+                section = true;
             }
         }
-
-        else if ((ch >= 'A' && ch <= 'Z') || (ch > 44 && ch < 58) || ch == 43)
-
+    else if (firstEntity == false)
         {
-            textline[i]=ch;
-            i++;
-            if (i>TEXTLINE_SIZE)
-            {
-                delete ptr[0];
-                return 0;
-            }
+        for (int i=0; i<entitiesLen; i++)
+        {
+          if (textline == entities[i])
+                {
+                    firstEntity = true;
+                    geometry.push_front(textline);
+                }
         }
-
-        else
+        }
+    else
         {
-            i = 0;
-
-            if (strlen(textline) > 0)
-            {
-                temp = (char *) textline;
-                strcat(temp," ");
-
-                if (strstr(temp,"EOF"))
-                {
-                    break;
-                }
-
-                prevByteSize = totalbytes;
-                totalbytes += strlen(temp);
-
-                if (fileLength < MAXBLOCKSIZE); //don't need to find entity boundaries in this case
-                else if (strstr(temp,"ARC")      ||  //do we have the beginning of an entity?
-                         strstr(temp,"LINE")     ||
-                         strstr(temp,"CIRCLE")   ||
-                         strstr(temp,"VERTEX")   ||
-                         strstr(temp,"POINT")    ||
-                         strstr(temp,"POLYLINE"))
-                {
-
-                    if (flag == 0)                  //yes
-                    {
-                        entityfound = 1;
-                        flag = 1;
-                    }
-                    else if (totalbytes > MAXBLOCKSIZE+1)
-                    {
-                        if (strstr(temp,"VERTEX"))
-                        {
-                            int verCount = strlen(ptr[arrayIdx])+1;
-                            char* resize;
-                            resize = new char[verCount+1];
-                            memset(resize,'\0',verCount+1);
-                            strncpy(resize,ptr[arrayIdx],verCount);
-                            delete[] ptr[arrayIdx];
-                            ptr[arrayIdx] = new char[verCount+1];
-                            memset(ptr[arrayIdx],'\0',verCount+1);
-                            strncpy(ptr[arrayIdx],resize,verCount+1);
-                            delete[] resize;
-                            strcat(ptr[arrayIdx],"SEQ");
-                            strcpy(temp,"POLYLINE");
-
-                        }
-                        char * resize;
-                        resize = new char[totalbytes + 2];
-                        memset(resize,'\0',totalbytes + 2);
-                        strncpy(resize,ptr[arrayIdx],prevByteSize);
-                        delete[] ptr[arrayIdx];
-                        ptr[arrayIdx] = new char[totalbytes+strlen(temp)+2];
-                        memset(ptr[arrayIdx],0,totalbytes+strlen(temp)+2);
-                        strncpy(ptr[arrayIdx],resize,totalbytes);
-                        delete[] resize;
-
-                        strcat(ptr[arrayIdx],"~");
-                        arrayIdx++;
-                        ptr[arrayIdx] =	new char[MAXBLOCKSIZE+2];
-                        memset(ptr[arrayIdx],0,MAXBLOCKSIZE+2);
-                        totalbytes = strlen(temp);
-                    }
-                }
-                else if (totalbytes > MAXBLOCKSIZE+1 && entityfound && //processing entity elements - haven't found end
-                         (!strstr(temp,"ARC")      ||
-                          !strstr(temp,"LINE")     ||
-                          !strstr(temp,"CIRCLE")   ||
-                          !strstr(temp,"POINT")    ||
-                          !strstr(temp,"VERTEX")   ||
-                          !strstr(temp,"SEQ")      ||
-                          !strstr(temp,"POLYLINE")))
-                {
-                    char * resize;
-                    resize = new char[totalbytes];
-                    memset(resize,'\0',totalbytes);
-                    strncpy(resize,ptr[arrayIdx],prevByteSize);
-                    delete[] ptr[arrayIdx];
-                    ptr[arrayIdx] = new char[totalbytes+strlen(temp)+1+ PAD ];
-                    memset(ptr[arrayIdx],0,totalbytes+strlen(temp)+1+ PAD);
-                    strncpy(ptr[arrayIdx],resize,totalbytes);
-                    delete[] resize;
-                }
-                else if (totalbytes > MAXBLOCKSIZE+1 && entityfound &&
-                         (strstr(temp,"ARC")      ||
-                          strstr(temp,"LINE")     ||
-                          strstr(temp,"CIRCLE")   ||
-                          strstr(temp,"POINT")    ||
-                          strstr(temp,"VERTEX")    ||
-                          strstr(temp,"SEQ")    ||
-                          strstr(temp,"POLYLINE")))
-                {
-                    if (strstr(temp,"VERTEX"))
-                    {
-                        char * resize;
-                        long int ptrLen = strlen(ptr[arrayIdx]);
-                        resize = new char[ptrLen+1];
-                        memset(resize,'\0',ptrLen+1);
-                        strncpy(resize,ptr[arrayIdx],ptrLen-1);
-                        delete[] ptr[arrayIdx];
-                        ptr[arrayIdx] = new char[ptrLen+1];
-                        memset(ptr[arrayIdx],0,ptrLen+1);
-                        strncpy(ptr[arrayIdx],resize,ptrLen + 1);
-                        delete[] resize;
-                        strcat(ptr[arrayIdx],"JN");
-                    }
-
-                    arrayIdx++;
-
-                    ptr[arrayIdx] =	new char[MAXBLOCKSIZE+1];
-                    memset(ptr[arrayIdx],0,MAXBLOCKSIZE+1);
-                    totalbytes = strlen(temp);
-                }
-
-
-
-                strcat(ptr[arrayIdx],temp);
-
-                memset(textline,'\0',strlen(textline));
-            }
+        geometry.push_front(textline);
         }
     }
 
@@ -203,22 +61,6 @@ int DXFio::fileRead()
     {
         return 0;
     }
-
-    char * resize;
-
-    if (fileLength < MAXBLOCKSIZE+1)
-        resize = new char[fileLength + 1+ PAD];
-    else
-        resize = new char[totalbytes + 1+ PAD];
-
-    memset(resize,'\0',totalbytes);
-    strcpy(resize,ptr[arrayIdx]);
-
-    strncpy(ptr[arrayIdx],resize,strlen(resize));
-    strcat(ptr[arrayIdx],"EOF");
-    delete[] resize;
-    flag = entities = section = entityfound = 0;
-
     return 1;
 }
 

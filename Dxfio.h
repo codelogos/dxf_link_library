@@ -20,29 +20,20 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include "fileio.h"
 #include <windows.h>
 #include <fstream>
+#include <deque>
 #ifndef DXFIO_H
 #define DXFIO_H
-const int NUMBLOCKS = 10000;
-#define TEXTLINE_SIZE 256
+
+const string entities[6] = {"CIRCLE","LWPOLYLINE","POLYLINE","LINE","ARC","VERTEX"};
+
 class DXFio: public fileIO
 	{
-long int MAXBLOCKSIZE;
-		int arrayIdx, numblocks;
-		ifstream* fin;
-		long int fileLength;
-		char * ptr[NUMBLOCKS];
+		std::ifstream* fin;
+		deque <string> geometry;
+		static const size_t entitiesLen = sizeof(entities) / sizeof(entities[0]);
 	public:
-		int returnCount(){return numblocks-1;}
-	~DXFio()
+		~DXFio()
 		{
-		int j = 0;
-		while (j<=arrayIdx)
-			{
-			delete[] ptr[j];
-			j++;
-			}
-
-		fileLength = 0;
 		if (fin)
 			{
 			fin->close();
@@ -50,52 +41,14 @@ long int MAXBLOCKSIZE;
 			fin = NULL;
 			}
 		}
-
-
-
 		DXFio(const char* name, unsigned rwaccess):fileIO(name,rwaccess)
 			{
-			int i = 0;
-			numblocks =	arrayIdx = 0;
-			fileLength = 0;
-
-			fin = NULL;
-
-			ifstream Fin(name);
-			char ch, textline[TEXTLINE_SIZE];
-
-			while(Fin.get(ch))
-				{
-				if ((ch >= 'A' && ch <= 'Z') || (ch > 44 && ch < 58) || ch == 43)
-					{
-					textline[i]=ch;
-					i++;
-					}
-				else
-					{
-					i = 0;
-					if (strlen(textline) > 0)
-						{
-						fileLength += (strlen(textline)+1);
-						memset(textline,0,sizeof(textline));
-						}
-					}
-				}
-			i = 0;
-			MAXBLOCKSIZE = fileLength + 1024;
-
-			while(i < NUMBLOCKS)
-				{
-				ptr[i] = NULL;
-				i++;
-				}
-
-			Fin.close();
-			numblocks =  (int)fileLength / (MAXBLOCKSIZE-1024);
 			fin = new ifstream(name);
-		}
-
-	char * returnPointer( int k ){ return ptr[k]; }
+            }
+    deque <string> *returnGeometry()
+    {
+        return &geometry;
+    }
 	int fileRead();
 	} ;
 #endif

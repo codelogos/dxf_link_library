@@ -88,13 +88,14 @@ int DXFLinkList::isVertexJoined(DXFLinkList *dll)
     else
         return 0;
 }
-void DXFLinkList::addnode(type t, char* ctemp)
+void DXFLinkList::addnode(type t, const char* ctemp)
 {
     char* p,* tptr = NULL;
+    //MessageBox(NULL,ctemp,"",MB_OK);
     double dtemp;
     static double totalPolyLength;
-    char temp2[40];
     temp = new DXFLinkList();
+
 
     if (dllHead == NULL)
     {
@@ -105,7 +106,11 @@ void DXFLinkList::addnode(type t, char* ctemp)
         dllTemp = dllHead;
         dllTemp->current = dllHead;
     }
-    else
+    else if (t == vertex)
+    {
+        goto VERTEX;
+    }
+     else
     {
         dllTemp->next = temp;
         temp->prev = dllTemp;
@@ -117,31 +122,56 @@ void DXFLinkList::addnode(type t, char* ctemp)
     dllTemp->entityLength = 0;
     dllTemp->entityType = t;
 
-    if (t == polyline)// || t == vertex)
+if (t == polyline || t == lwpolyline)
+{
+
+    char *p70;
+    char ch70[4];
+    p70 = strstr(ctemp," 70 ");
+    if (p70)
     {
-        char enttemp[4][11] = {{" 10 "},{" 20 "},{"CONTINUOUS"},{"SEQ"}};
+    int closePoly = atoi(p70+3);
+
+    if (closePoly == 1)
+        closed = true;
+
+    }
+}
+
+VERTEX:
+    if (t == vertex)
+    {
+        char enttemp[5][11] = {{" 10 "},{" 20 "},{"CONTINUOUS"},{"SEQEND"}};
         char *p;
         char lastXVal[30], lastYVal[30];
-
-        do
-        {
             if (dllTemp->plHead == NULL )
             {
                 dllTemp->plHead = new DXFpolyline();
                 dllTemp->plTemp = dllTemp->plHead;
                 dllTemp->plTail = dllTemp->plHead;
+                dllTemp->plTemp->next = NULL;
+                dllTemp->plTemp->prev = NULL;
+
+                if (closed == true)
+                {
+                dllTemp->plTemp->next = new DXFpolyline();
+                }
             }
             else
             {
                 dllTemp->plCurrent = new DXFpolyline();
+                if (dllTemp->plTemp->next)
+                    {
+                        dllTemp->plCurrent->next = dllTemp->plTemp->next;
+                    }
                 dllTemp->plTail = dllTemp->plCurrent;
-                if (dllTemp->plCurrent == NULL)
-                    break;
+
 
                 dllTemp->plTemp->next = dllTemp->plCurrent;
                 dllTemp->plCurrent->prev = dllTemp->plTemp;
                 dllTemp->plTemp = dllTemp->plCurrent;
             }
+
             char *_temp;
 
             for (int i = 0; i<2; i++)
@@ -154,51 +184,98 @@ void DXFLinkList::addnode(type t, char* ctemp)
                     strcpy(dllTemp->plTemp->ycoor,lastYVal);
                     return;
                 }
+                char temp2[40];
                 _temp = strchr(p+4,' ');
                 *_temp = '\0';
                 strcpy(temp2,p+4);
                 tptr = p;
 
                 *_temp = ' ';
+
                 if (i == 0)
                 {
                     strcpy(dllTemp->plTemp->xcoor,temp2);
                     strcpy(lastXVal,temp2);
+
+                    if (closed == true && dllTemp->plHead == dllTemp->plTail)
+                    {
+                        strcpy(dllTemp->plTemp->next->xcoor,temp2);
+                    }
                 }
                 if (i == 1)
                 {
                     strcpy(dllTemp->plTemp->ycoor,temp2);
                     strcpy(lastYVal,temp2);
+                    if (closed == true && dllTemp->plHead == dllTemp->plTail)
+                    {
+                        strcpy(dllTemp->plTemp->next->ycoor,temp2);
+                    }
                 }
             }
-            if (tptr)
-                ctemp = tptr+2;
-        }
-        while (strstr(p,enttemp[3]) - strstr(p,enttemp[1]) > 30);
-        dllTemp->plTemp = dllTemp->plHead;
-        static int i;
-        while (dllTemp->plTemp)
-        {
-            if (i == 0)
+    }
+    if (t == lwpolyline)
+    {
+        char enttemp[3][5] = {{" 10 "},{" 20 "},{" 70 "}};
+
+        char x[30], y[30];
+        char *p10, *p20, *p70;
+
+        closed = false;
+        p10 = p20 = (char *)ctemp;
+        p10 = strstr(ctemp,enttemp[0]);
+        p20 = strstr(p10,enttemp[1]);
+
+        char *_temp;
+
+        while(1)
             {
-                strcpy(lastXVal,dllTemp->plTemp->xcoor);
-                strcpy(lastYVal,dllTemp->plTemp->ycoor);
-                i = 1;
+            if (dllTemp->plHead == NULL )
+            {
+                dllTemp->plHead = new DXFpolyline();
+                dllTemp->plTemp = dllTemp->plHead;
+                dllTemp->plTail = dllTemp->plHead;
+                dllTemp->plTemp->next = NULL;
+                dllTemp->plTemp->prev = NULL;
             }
             else
             {
-                totalPolyLength += computeLineLength(atof(dllTemp->plTemp->xcoor),
-                                                     atof(lastXVal),atof(dllTemp->plTemp->ycoor),
-                                                     atof(lastYVal));
-                strcpy(lastXVal,dllTemp->plTemp->xcoor);
-                strcpy(lastYVal,dllTemp->plTemp->ycoor);
+                dllTemp->plCurrent = new DXFpolyline();
+                dllTemp->plTail = dllTemp->plCurrent;
+                dllTemp->plTemp->next = dllTemp->plCurrent;
+                dllTemp->plCurrent->prev = dllTemp->plTemp;
+                dllTemp->plTemp = dllTemp->plCurrent;
             }
-            dllTemp->plTemp = dllTemp->plTemp->next;
-        }
-        dllTemp->entityLength = totalPolyLength;
-        i = totalPolyLength = 0;
-    }
+            char *_temp;
+            _temp = strchr(p10+4,' ');
+            *_temp = '\0';
 
+                strcpy(x,p10+4);
+
+                _temp = strchr(p20+4,' ');
+                *_temp = '\0';
+
+                strcpy(y,p20+4);
+
+                strcpy(dllTemp->plTemp->xcoor,x);
+                strcpy(dllTemp->plTemp->ycoor,y);
+                p10 = strstr(_temp + 1,enttemp[0]);
+                p20 = strstr(p10,enttemp[1]);
+
+               if (!strstr(p20,enttemp[0]))
+                        break;
+        }
+        if (closed == true)
+        {
+                dllTemp->plCurrent = new DXFpolyline();
+                dllTemp->plTail = dllTemp->plCurrent;
+                dllTemp->plTemp->next = dllTemp->plCurrent;
+                dllTemp->plCurrent->prev = dllTemp->plTemp;
+                dllTemp->plTemp = dllTemp->plCurrent;
+                strcpy(dllTemp->plTemp->xcoor,dllTemp->plHead->xcoor);
+                strcpy(dllTemp->plTemp->ycoor,dllTemp->plHead->ycoor);
+                closed = false;
+        }
+    }
     if (t == arc)
     {
         char enttemp[5][5] = {{" 10 "},{" 20 "},{" 40 "},{" 50 "},{" 51 "}};
@@ -247,9 +324,9 @@ void DXFLinkList::addnode(type t, char* ctemp)
                 break;
             }
        }
-        dllTemp->entityLength = computeArcLength(dllTemp->darc->radius,
-                                dllTemp->darc->startangle,
-                                dllTemp->darc->endangle);
+        //dllTemp->entityLength = computeArcLength(dllTemp->darc->radius,
+        //                        dllTemp->darc->startangle,
+        //                          dllTemp->darc->endangle);
         D(fio.fileWrite(" ",1));
     }
 
@@ -287,20 +364,6 @@ void DXFLinkList::addnode(type t, char* ctemp)
             }
         }
     }
-    if (t == line)
-    {
-        double intermediateVal;
-        if (DLLINE(startx) - DLLINE(endx) == 0 && DLLINE(starty) - DLLINE(endy) == 0)
-            dllTemp->entityType = invalidline;
-        else
-        {
-            intermediateVal = computeLineLength(dllTemp->dline->startx,
-                                                dllTemp->dline->endx,
-                                                dllTemp->dline->starty,
-                                                dllTemp->dline->endy);
-            dllTemp->entityLength = intermediateVal;
-        }
-    }
 
     if (t == circle)
     {
@@ -333,7 +396,7 @@ void DXFLinkList::addnode(type t, char* ctemp)
                 break;
             }
         }
-        dllTemp->entityLength = computeArcLength(dllTemp->dcircle->radius,0,360);
+        //dllTemp->entityLength = computeArcLength(dllTemp->dcircle->radius,0,360);
     }
 
 }
@@ -365,3 +428,4 @@ double DXFLinkList::computeLineLength(double xstart, double xend, double ystart,
     length = sqrt(dx + dy);
     return length;
 }
+
